@@ -23,10 +23,10 @@ def requests():
 
 
 @app.route("/processed_requests")
-def requests():
+def processed_requests():
     return render_template('processed_requests.html')
 
 
 @app.route("/admin")
-def requests():
+def admin():
     return render_template('admin.html')

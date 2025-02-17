@@ -1,16 +1,9 @@
-<html lang="sk">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prihlásenie</title>
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
-    <div class="navbar">
-        <a href="index.html">Domov</a>
-        <a href="requests.html">Požiadavky</a>
-        <a href="admin.html">Správa požiadaviek</a>
-    </div>
+{% extends "_base.html" %}
+
+{% block title %}Prihlasenie{% endblock %}
+
+
+{% block content %}
     <div class="container">
         <h2>Prihlásenie</h2>
         <form>
@@ -23,5 +16,5 @@
             <button type="submit">Prihlásiť sa</button>
         </form>
     </div>
-</body>
-</html>
+
+{% endblock %}
