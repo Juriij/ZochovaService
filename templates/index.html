@@ -5,15 +5,17 @@
 
 {% block content %}
     <div class="container">
-        <h2>Prihlásenie</h2>
+        <h2>Log in</h2>
         <form>
-            <label for="username">Používateľské meno:</label>
+            <div class="login_info">
+            <label for="username">Username</label>
             <input type="text" id="username" name="username" required>
-            <br>
-            <label for="password">Heslo:</label>
+            
+            <label for="password">Password</label>
             <input type="password" id="password" name="password" required>
-            <br>
-            <button type="submit">Prihlásiť sa</button>
+            
+            <button type="submit">Login</button>
+            </div>
         </form>
     </div>
 

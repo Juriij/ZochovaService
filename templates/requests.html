@@ -5,24 +5,24 @@
 
 {% block content %}
 <div class="container">
-    <h2>Zadajte požiadavku</h2>
+    <h2>Add request</h2>
     <form>
-        <label for="room">Miestnosť:</label>
+        <label for="room">Room:</label>
         <input type="text" id="room" name="room" required>
         <br>
-        <label for="description">Popis:</label>
+        <label for="description">Description:</label>
         <textarea id="description" name="description" required></textarea>
         <br>
-        <label for="priority">Priorita:</label>
+        <label for="priority">Priority:</label>
         <select id="priority" name="priority">
-            <option value="low">Nízka</option>
-            <option value="medium">Stredná</option>
-            <option value="high">Vysoká</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
         </select>
         <br>
         <button type="submit">Odoslať požiadavku</button>
     </form>
-    <h2>Moje požiadavky</h2>
+    <h2>Unfinished requests</h2>
     <ul>
         <li>Požiadavka 1 - Stav: Čaká na spracovanie</li>
         <li>Požiadavka 2 - Stav: Oprava prebieha</li>
