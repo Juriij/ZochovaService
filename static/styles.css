@@ -20,13 +20,27 @@ body {
     background-color: #575757;
 }
 .container {
-    max-width: 800px;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin: 20px auto;
     padding: 20px;
     background: white;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
 }
+
+.login_info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px auto;
+
+}
+    
+
 button {
     border: none;
     padding: 10px;
@@ -36,20 +50,23 @@ button {
     color: white;
 }
 .btn-progress {
-    background-color: #ffc107;
+    background-color: #f8de91;
 }
 .btn-progress:hover {
     background-color: #e0a800;
+    transition: 0.3s;
 }
 .btn-complete {
-    background-color: #28a745;
+    background-color: #71a97d;
 }
 .btn-complete:hover {
     background-color: #218838;
+    transition: 0.3s;
 }
 .btn-reject {
-    background-color: #dc3545;
+    background-color: #dd7a84;
 }
 .btn-reject:hover {
     background-color: #c82333;
+    transition: 0.3s;
 }
