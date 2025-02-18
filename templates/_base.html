@@ -7,12 +7,31 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="navbar">
+    <nav class="navbar">
+        <a href="{{ url_for('home') }}">Domov</a>
+        <a href="{{ url_for('requests') }}">Požiadavky</a>
+        <a href="{{ url_for('processed_requests') }}">História požiadaviek</a>
+        <a href="{{ url_for('admin') }}">Správa požiadaviek</a>
+        
+        {% if current_user.role == 'janitor' %}
+            <a href="{{ url_for('janitor_page') }}">Janitor Dashboard</a> <!-- Specific to janitors -->
+        {% elif current_user.role == 'teacher' %}
+            <a href="{{ url_for('teacher_page') }}">Teacher Dashboard</a> <!-- Specific to teachers -->
+        {% endif %}
+        
+        <!-- {% if current_user.is_authenticated %}
+            <a href="{{ url_for('logout') }}">Odhlásiť sa</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Prihlásenie</a>
+            <a href="{{ url_for('register') }}">Registrácia</a>
+        {% endif %} -->
+    </nav>
+    <!-- <div class="navbar">
         <a href="{{ url_for('home') }}">Domov</a>
         <a href="{{ url_for('requests') }}">Požiadavky</a>
         <a href="{{ url_for('processed_requests') }}">Historia požiadaviek</a>
         <a href="{{ url_for('admin') }}">Správa požiadaviek</a>
-    </div>
+    </div> -->
 
     <main>
         {% block content %}{% endblock %}
