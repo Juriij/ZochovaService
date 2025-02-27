@@ -31,6 +31,10 @@
                 {{ form.password.label }} <br> {{ form.password() }} <br>
                 {{ form.submit() }}
             </form>
+
+            <a href="{{ url_for('register') }}">
+                <button type="button">Register here</button>
+            </a>
         </div>
     </div>
 </body>
