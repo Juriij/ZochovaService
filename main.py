@@ -27,14 +27,14 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+
 @app.route('/')
 def home():
     if current_user.is_authenticated:
-        if current_user.role == 'teacher':
-            return redirect(url_for('teacher_page'))
-        elif current_user.role == 'janitor' and current_user.username == "fero" and current_user.email == "fero.ferovic@gmail.com":
-            return redirect(url_for('janitor_page'))
-    return redirect(url_for('register'))
+        # If the user is logged in (teacher or janitor), show the index page
+        return render_template('index.html')
+    return redirect(url_for('register'))  # If not authenticated, redirect to the registration page
+
 
 
 
@@ -99,20 +99,45 @@ def login():
 
 
 
+# @app.route("/requests")
+# def requests():
+#     return render_template('requests.html')
+
+
+
 @app.route("/requests")
+@login_required
 def requests():
+    if current_user.role != 'teacher':
+        flash('Access denied: Only teachers can view this page.', 'error')
+        return redirect(url_for('home'))  
     return render_template('requests.html')
 
 
+# @app.route("/processed_requests")
+# def processed_requests():
+#     return render_template('processed_requests.html')
+
+
+
 @app.route("/processed_requests")
+@login_required
 def processed_requests():
     return render_template('processed_requests.html')
 
 
-@app.route("/admin")
-def admin():
-    return render_template('admin.html')
+# @app.route("/admin")
+# def admin():
+#     return render_template('admin.html')
 
+
+@app.route("/admin")
+@login_required
+def admin():
+    if current_user.role != 'janitor':
+        flash('Access denied: Only janitors can view this page.', 'error')
+        return redirect(url_for('index'))  # Redirect to the index page if not a janitor
+    return render_template('admin.html')
 
 
 
