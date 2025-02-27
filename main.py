@@ -32,7 +32,7 @@ def home():
     if current_user.is_authenticated:
         if current_user.role == 'teacher':
             return redirect(url_for('teacher_page'))
-        elif current_user.role == 'janitor':
+        elif current_user.role == 'janitor' and current_user.username == "fero" and current_user.email == "fero.ferovic@gmail.com":
             return redirect(url_for('janitor_page'))
     return redirect(url_for('register'))
 
