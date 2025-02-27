@@ -16,7 +16,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///requests.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
-app.secret_key = 'tvoj_krastny_sigma_klucik'
+app.secret_key = 'kluc_ne'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -107,8 +107,10 @@ def requests():
     if current_user.role != 'teacher':
         flash('Access denied: Only teachers can view this page.', 'error')
         return redirect(url_for('home'))  
+
+    # Filter the requests based on their status
+    active_requests = Request.query.filter(Request.status.in_(['Waiting For Approval', 'Work In Progress'])).order_by(Request.priority.desc()).all()
     
-    active_requests = Request.query.order_by(Request.priority.desc()).all()
     return render_template('requests.html', active_requests=active_requests)
 
 
@@ -128,9 +130,10 @@ def add_request():
         description = request.form.get('description')
         place = request.form.get('place')
         priority = request.form.get('priority')
+        status = request.form.get('status')
 
         # Create a new request object
-        new_request = Request(title=title, description=description, place=place, priority=priority)
+        new_request = Request(title=title, description=description, place=place, priority=priority, status=status)
 
         # Add to database
         db.session.add(new_request)
@@ -163,7 +166,11 @@ def view_request(request_id):
 @app.route("/processed_requests")
 @login_required
 def processed_requests():
-    return render_template('processed_requests.html')
+    completed_requests = Request.query.filter_by(status="Completed").order_by(Request.priority.desc()).all()
+    denied_requests = Request.query.filter_by(status="Denied").order_by(Request.priority.desc()).all()
+
+    return render_template("processed_requests.html", completed_requests=completed_requests, denied_requests=denied_requests)
+
 
 
 
@@ -172,9 +179,65 @@ def processed_requests():
 def admin():
     if current_user.role != 'janitor':
         flash('Access denied: Only janitors can view this page.', 'error')
-        return redirect(url_for('index'))  # Redirect to the index page if not a janitor
-    return render_template('admin.html')
+        return redirect(url_for('index'))
 
+    new_requests = Request.query.filter_by(status="Waiting For Approval").order_by(Request.priority.desc()).all()
+    work_in_progress_requests = Request.query.filter_by(status="Work In Progress").order_by(Request.priority.desc()).all()
+
+    return render_template('admin.html', new_requests=new_requests, work_in_progress_requests=work_in_progress_requests)
+
+
+
+
+
+
+
+
+
+
+
+@app.route("/request/<int:request_id>/accept", methods=["POST"])
+@login_required
+def accept_request(request_id):
+    if current_user.role != 'janitor':
+        flash('Access denied.', 'error')
+        return redirect(url_for('admin'))
+
+    req = Request.query.get_or_404(request_id)
+    req.status = "Work In Progress"
+    db.session.commit()
+    flash('Request moved to Work In Progress.', 'success')
+    return redirect(url_for('admin'))
+
+
+
+@app.route("/request/<int:request_id>/reject", methods=["POST"])
+@login_required
+def reject_request(request_id):
+    if current_user.role != 'janitor':
+        flash('Access denied.', 'error')
+        return redirect(url_for('admin'))
+
+    req = Request.query.get_or_404(request_id)
+    req.status = "Denied"
+    db.session.commit()
+    flash('Request moved to History.', 'success')
+    return redirect(url_for('admin'))
+
+
+
+@app.route("/request/<int:request_id>/complete", methods=["POST"])
+@login_required
+def complete_request(request_id):
+    if current_user.role != 'janitor':
+        flash('Access denied.', 'error')
+        return redirect(url_for('admin'))
+
+    req = Request.query.get_or_404(request_id)
+    req.status = "Completed"
+    db.session.commit()
+    flash('Request marked as completed.', 'success')
+    return redirect(url_for('admin'))
 
 
 

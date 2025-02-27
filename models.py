@@ -10,7 +10,7 @@ class Request(db.Model):
     description = db.Column(db.Text, nullable=False)
     place = db.Column(db.Text, nullable=False)
     priority = db.Column(db.Integer)  #   0 - low, 1 - medium, 2 - high
-    status = "Waiting For Approval"
+    status = db.Column(db.String(20), nullable=False, default="Waiting For Approval") 
 
     def __repr__(self):
         return f'Článok: {self.title}'

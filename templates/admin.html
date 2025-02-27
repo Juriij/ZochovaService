@@ -1,18 +1,45 @@
 {% extends "_base.html" %}
-
-{% block title %}Skolnik{% endblock %}
+{% block title %}Janitor Dashboard{% endblock %}
 
 {% block content %}
-</div>
 <div class="container">
-    <h2>Requests</h2>
-    <ul>
-        <li>
-            Požiadavka 1 - <button class="btn-progress">Work in progress</button> <button class="btn-complete">Complete</button> <button class="btn-reject">Reject</button>
-        </li>
-        <li>
-            Požiadavka 2 - <button class="btn-progress">Work in progress</button> <button class="btn-complete">Complete</button> <button class="btn-reject">Reject</button>
-        </li>
-    </ul>
+    <h2>New Requests</h2>
+    {% if new_requests %}
+        <ul>
+            {% for req in new_requests %}
+                <li>
+                    <strong>{{ req.title }}</strong>
+                    (<a href="{{ url_for('view_request', request_id=req.id) }}">View</a>) 
+                    <form action="{{ url_for('accept_request', request_id=req.id) }}" method="post" style="display:inline;">
+                        <button type="submit">Accept</button>
+                    </form>
+                    <form action="{{ url_for('reject_request', request_id=req.id) }}" method="post" style="display:inline;">
+                        <button type="submit">Deny</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No new requests found.</p>
+    {% endif %}
+</div>
+
+<div class="container">
+    <h2>Work in Progress - Requests</h2>
+    {% if work_in_progress_requests %}
+        <ul>
+            {% for req in work_in_progress_requests %}
+                <li>
+                    <strong>{{ req.title }}</strong>
+                    (<a href="{{ url_for('view_request', request_id=req.id) }}">View</a>) 
+                    <form action="{{ url_for('complete_request', request_id=req.id) }}" method="post" style="display:inline;">
+                        <button type="submit">Completed</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No work in progress requests found.</p>
+    {% endif %}
 </div>
 {% endblock %}

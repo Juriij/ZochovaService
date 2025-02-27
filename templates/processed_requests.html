@@ -3,11 +3,49 @@
 {% block title %}Historia poziadaviek{% endblock %}
 
 {% block content %}
+<div class="container">
+    <h2>Completed Requests</h2>
+    {% if completed_requests %}
+        <ul>
+            {% for request in completed_requests %}
+                <li>
+                    <strong>{{ request.title }}</strong> (Priority: 
+                    {% if request.priority == 0 %}
+                        Low
+                    {% elif request.priority == 1 %}
+                        Medium
+                    {% else %}
+                        High
+                    {% endif %}
+                    ) - <a href="{{ url_for('view_request', request_id=request.id) }}">View Request</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No completed requests found.</p>
+    {% endif %}
 </div>
-    <div class="container">
-        
-    <h2>Completed requests</h2>
 
-    </div>
-    
+<div class="container">
+    <h2>Denied Requests</h2>
+    {% if denied_requests %}
+        <ul>
+            {% for request in denied_requests %}
+                <li>
+                    <strong>{{ request.title }}</strong> (Priority: 
+                    {% if request.priority == 0 %}
+                        Low
+                    {% elif request.priority == 1 %}
+                        Medium
+                    {% else %}
+                        High
+                    {% endif %}
+                    ) - <a href="{{ url_for('view_request', request_id=request.id) }}">View Request</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No denied requests found.</p>
+    {% endif %}
+</div>
 {% endblock %}
