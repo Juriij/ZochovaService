@@ -2,31 +2,54 @@
 
 {% block title %}Poziadavky{% endblock %}
 
-
 {% block content %}
 <div class="container">
     <h2>Add request</h2>
-    <form>
-        <label for="room">Room:</label>
-        <input type="text" id="room" name="room" required>
+    <form action="{{ url_for('add_request') }}" method="POST">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
         <br>
         <label for="description">Description:</label>
         <textarea id="description" name="description" required></textarea>
         <br>
+        <label for="room">Room:</label>
+        <input type="text" id="room" name="place" required> <!-- Updated to match 'place' in model -->
+        <br>
         <label for="priority">Priority:</label>
         <select id="priority" name="priority">
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
+            <option value="0">Low</option>
+            <option value="1">Medium</option>
+            <option value="2">High</option>
         </select>
         <br>
         <button type="submit">Odoslať požiadavku</button>
     </form>
-    <h2>Active requests</h2>
-    <ul>
-        <li>Požiadavka 1 - Stav: Čaká na spracovanie</li>
-        <li>Požiadavka 2 - Stav: Oprava prebieha</li>
-    </ul>
-</div>
 
+    <h2>Active requests</h2>
+
+    <!-- Display the active requests -->
+    {% if active_requests %}
+        <ul>
+            {% for request in active_requests %}
+                <li>
+                    <strong>{{ request.title }}</strong> (Priority: 
+                        {% if request.priority == 0 %}
+                            Low
+                        {% elif request.priority == 1 %}
+                            Medium
+                        {% else %}
+                            High
+                        {% endif %},
+                        Status:
+                        {{ request.status }})
+                    
+                    <!-- Link to view the full request with description -->
+                    <a href="{{ url_for('view_request', request_id=request.id) }}">View Full Description</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No active requests found.</p>
+    {% endif %}
+</div>
 {% endblock %}

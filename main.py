@@ -8,6 +8,7 @@ from models import db, User, Request
 from flask_login import current_user
 
 
+
 app = Flask(__name__)
 
 
@@ -99,11 +100,6 @@ def login():
 
 
 
-# @app.route("/requests")
-# def requests():
-#     return render_template('requests.html')
-
-
 
 @app.route("/requests")
 @login_required
@@ -111,12 +107,56 @@ def requests():
     if current_user.role != 'teacher':
         flash('Access denied: Only teachers can view this page.', 'error')
         return redirect(url_for('home'))  
-    return render_template('requests.html')
+    
+    active_requests = Request.query.order_by(Request.priority.desc()).all()
+    return render_template('requests.html', active_requests=active_requests)
 
 
-# @app.route("/processed_requests")
-# def processed_requests():
-#     return render_template('processed_requests.html')
+
+
+
+
+
+
+@app.route('/add_request', methods=['GET', 'POST'])
+def add_request():
+    active_requests = Request.query.order_by(Request.priority.desc()).all()
+
+    if request.method == 'POST':
+        # Get form data
+        title = request.form.get('title')
+        description = request.form.get('description')
+        place = request.form.get('place')
+        priority = request.form.get('priority')
+
+        # Create a new request object
+        new_request = Request(title=title, description=description, place=place, priority=priority)
+
+        # Add to database
+        db.session.add(new_request)
+        db.session.commit()
+
+        active_requests = Request.query.order_by(Request.priority.desc()).all()
+
+        # Optionally, flash a message or redirect
+        flash('Request submitted successfully!', 'success')
+
+
+    return render_template('requests.html', active_requests=active_requests)
+
+
+
+
+
+@app.route("/request/<int:request_id>")
+@login_required
+def view_request(request_id):
+    # Fetch the request by its ID
+    request = Request.query.get_or_404(request_id)
+    
+    # Render the full request details on a separate page
+    return render_template('view_request.html', request=request)
+
 
 
 
@@ -125,10 +165,6 @@ def requests():
 def processed_requests():
     return render_template('processed_requests.html')
 
-
-# @app.route("/admin")
-# def admin():
-#     return render_template('admin.html')
 
 
 @app.route("/admin")
