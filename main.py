@@ -65,14 +65,18 @@ def register():
         # Assign roles based on user input (for simplicity)
         role = request.form.get("role")  # Get role from form
 
-        new_user = User(username=form.username.data, email=form.email.data, role=role)
-        new_user.set_password(form.password.data)
+        new_user = User(
+            username=form.username.data,
+            email=form.email.data,
+            role=role,
+            password=form.password.data  # Store password directly (No Hashing)
+        )
+
         db.session.add(new_user)
         db.session.commit()
         flash('Registrovaný úspešne!', 'success')
         return redirect(url_for('login'))
     
-
     return render_template('register.html', form=form)
 
 
@@ -86,7 +90,7 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user and user.check_password(form.password.data):
+        if user and user.password == form.password.data:  # Direct comparison
             login_user(user)
             flash('Prihlásenie úspešné', 'success')
             return redirect(url_for('home'))
@@ -94,6 +98,9 @@ def login():
             flash('Nesprávny email alebo heslo', 'error')
 
     return render_template('login.html', form=form)
+
+
+
 
 
 
