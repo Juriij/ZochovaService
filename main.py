@@ -165,7 +165,7 @@ def view_request(request_id):
     request = Request.query.get_or_404(request_id)
     
     # Render the full request details on a separate page
-    return render_template('view_request.html', request=request)
+    return render_template('view_request.html', request=request, current_user=current_user)
 
 
 

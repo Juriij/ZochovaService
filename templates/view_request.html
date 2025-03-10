@@ -18,7 +18,14 @@
     <p><strong>Room:</strong> {{ request.place }}</p>
     <p><strong>Description:</strong> {{ request.description }}</p>
 
-    <!-- Optionally, add a button to go back to the previous page -->
-    <a href="{{ url_for('requests') }}">Back to Requests</a>
+    {% if current_user.role == 'teacher' %}
+        <a href="{{ url_for('requests') }}">Back to Requests</a>
+
+    {% elif current_user.role == 'janitor' %}
+        <a href="{{ url_for('admin') }}">Back to Requests</a>
+        
+    {% endif %}
+
+
 </div>
 {% endblock %}
