@@ -59,7 +59,7 @@ def register():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
-            flash('Email už existuje', 'error')
+            # flash('Email už existuje', 'error')
             return redirect(url_for('register'))
 
         # Assign roles based on user input (for simplicity)
@@ -74,7 +74,7 @@ def register():
 
         db.session.add(new_user)
         db.session.commit()
-        flash('Registrovaný úspešne!', 'success')
+        # flash('Registrovaný úspešne!', 'success')
         return redirect(url_for('login'))
     
     return render_template('register.html', form=form)
@@ -92,10 +92,11 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and user.password == form.password.data:  # Direct comparison
             login_user(user)
-            flash('Prihlásenie úspešné', 'success')
+            # flash('Prihlásenie úspešné', 'success')
             return redirect(url_for('home'))
         else:
-            flash('Nesprávny email alebo heslo', 'error')
+            print('Nesprávny email alebo heslo')
+            # flash('Nesprávny email alebo heslo', 'error')
 
     return render_template('login.html', form=form)
 
@@ -112,7 +113,7 @@ def login():
 @login_required
 def requests():
     if current_user.role != 'teacher':
-        flash('Access denied: Only teachers can view this page.', 'error')
+        # flash('Access denied: Only teachers can view this page.', 'error')
         return redirect(url_for('home'))  
 
     # Filter the requests based on their status
@@ -149,7 +150,7 @@ def add_request():
         active_requests = Request.query.order_by(Request.priority.desc()).all()
 
         # Optionally, flash a message or redirect
-        flash('Request submitted successfully!', 'success')
+        # flash('Request submitted successfully!', 'success')
 
 
     return render_template('requests.html', active_requests=active_requests)
@@ -185,7 +186,7 @@ def processed_requests():
 @login_required
 def admin():
     if current_user.role != 'janitor':
-        flash('Access denied: Only janitors can view this page.', 'error')
+        # flash('Access denied: Only janitors can view this page.', 'error')
         return redirect(url_for('index'))
 
     new_requests = Request.query.filter_by(status="Waiting For Approval").order_by(Request.priority.desc()).all()
@@ -207,13 +208,13 @@ def admin():
 @login_required
 def accept_request(request_id):
     if current_user.role != 'janitor':
-        flash('Access denied.', 'error')
+        # flash('Access denied.', 'error')
         return redirect(url_for('admin'))
 
     req = Request.query.get_or_404(request_id)
     req.status = "Work In Progress"
     db.session.commit()
-    flash('Request moved to Work In Progress.', 'success')
+    #flash('Request moved to Work In Progress.', 'success')
     return redirect(url_for('admin'))
 
 
@@ -222,13 +223,13 @@ def accept_request(request_id):
 @login_required
 def reject_request(request_id):
     if current_user.role != 'janitor':
-        flash('Access denied.', 'error')
+        # flash('Access denied.', 'error')
         return redirect(url_for('admin'))
 
     req = Request.query.get_or_404(request_id)
     req.status = "Denied"
     db.session.commit()
-    flash('Request moved to History.', 'success')
+    # flash('Request moved to History.', 'success')
     return redirect(url_for('admin'))
 
 
@@ -237,13 +238,13 @@ def reject_request(request_id):
 @login_required
 def complete_request(request_id):
     if current_user.role != 'janitor':
-        flash('Access denied.', 'error')
+        # flash('Access denied.', 'error')
         return redirect(url_for('admin'))
 
     req = Request.query.get_or_404(request_id)
     req.status = "Completed"
     db.session.commit()
-    flash('Request marked as completed.', 'success')
+    # flash('Request marked as completed.', 'success')
     return redirect(url_for('admin'))
 
 
