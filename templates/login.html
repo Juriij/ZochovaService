@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Login - Zochova Service</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
 <body>
@@ -19,22 +19,32 @@
             {% endfor %}
         </div>
         {% endif %}
-        {% endwith %}
+    {% endwith %}
+    
     <div class="container-log-reg">
         <header>
-            <h1>Zochova blog</h1>
+            <h1>Welcome Back</h1>
+            <p>Login to your Zochova Service account</p>
         </header>
         <div class="article-detail">
             <form method="post" class="register-login">
                 {{ form.hidden_tag() }}
-                {{ form.email.label }} <br> {{ form.email() }} <br>
-                {{ form.password.label }} <br> {{ form.password() }} <br>
-                {{ form.submit() }}
+                <div class="form-group">
+                    {{ form.email.label }}
+                    {{ form.email(class="form-control", placeholder="Enter your email") }}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label }}
+                    {{ form.password(class="form-control", placeholder="Enter your password") }}
+                </div>
+                {{ form.submit(class="submit-btn") }}
             </form>
 
-            <a href="{{ url_for('register') }}">
-                <button type="button">Register here</button>
-            </a>
+            <div class="login-link">
+                <a href="{{ url_for('register') }}">
+                    <button type="button">Don't have an account? Register here</button>
+                </a>
+            </div>
         </div>
     </div>
 </body>

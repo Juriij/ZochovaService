@@ -3,22 +3,37 @@
 {% block title %}Request Details{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2>{{ request.title }}</h2>
-    <p><strong>Priority:</strong> 
-        {% if request.priority == 0 %}
-            Low
-        {% elif request.priority == 1 %}
-            Medium
-        {% else %}
-            High
-        {% endif %}
-    </p>
-    <p><strong>Status:</strong> {{ request.status }}</p>
-    <p><strong>Room:</strong> {{ request.place }}</p>
-    <p><strong>Description:</strong> {{ request.description }}</p>
-
-    <!-- Optionally, add a button to go back to the previous page -->
-    <a href="{{ url_for('requests') }}">Back to Requests</a>
+<div class="container-log-reg">
+    <header>
+        <h1>Request Details</h1>
+        <p>View and manage request information</p>
+    </header>
+    <div class="article-detail">
+        <div class="request-info">
+            <h2>{{ request.title }}</h2>
+            <div class="request-details">
+                <p><strong>Priority:</strong> 
+                    <span class="priority-indicator priority-{{ 'high' if request.priority == 2 else 'medium' if request.priority == 1 else 'low' }}"></span>
+                    {% if request.priority == 0 %}
+                        Low
+                    {% elif request.priority == 1 %}
+                        Medium
+                    {% else %}
+                        High
+                    {% endif %}
+                </p>
+                <p><strong>Status:</strong> 
+                    <span class="status-badge status-{{ request.status.lower().replace(' ', '-') }}">
+                        {{ request.status }}
+                    </span>
+                </p>
+                <p><strong>Room:</strong> {{ request.place }}</p>
+                <p><strong>Description:</strong> {{ request.description }}</p>
+            </div>
+            <div class="request-actions">
+                <a href="{{ url_for('requests') }}" class="btn btn-secondary">Back to Requests</a>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

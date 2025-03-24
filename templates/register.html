@@ -1,77 +1,11 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-
-<body>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        <div class="flash-messages">
-            {% for category, message in messages %}
-            <div class="flash-message {{ category }}">
-                {{ message }}
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% endwith %}
-    <div class="container-log-reg">
-        <header>
-            <h1>Zochova blog</h1>
-        </header>
-        <div class="article-detail">
-            <form method="post" class="register-login">
-                {{ form.hidden_tag() }}
-                {{ form.username.label }} <br> {{ form.username() }} <br>
-                {{ form.email.label }} <br> {{ form.email() }} <br>
-                {{ form.role.label }} <br> {{ form.role() }} <br>
-                {{ form.password.label }} <br> {{ form.password() }} <br>
-                {{ form.password_confirm.label }} <br> {{ form.password_confirm() }} <br>
-                {{ form.submit() }}
-            </form>
-        </div>
-    </div>
-</body>
-
-</html> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Register - Zochova Service</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 
 <body>
@@ -89,23 +23,40 @@
     
     <div class="container-log-reg">
         <header>
-            <h1>Zochova blog</h1>
+            <h1>Create Account</h1>
+            <p>Join Zochova Service today</p>
         </header>
         <div class="article-detail">
             <form method="post" class="register-login">
                 {{ form.hidden_tag() }}
-                {{ form.username.label }} <br> {{ form.username() }} <br>
-                {{ form.email.label }} <br> {{ form.email() }} <br>
-                {{ form.role.label }} <br> {{ form.role() }} <br>
-                {{ form.password.label }} <br> {{ form.password() }} <br>
-                {{ form.password_confirm.label }} <br> {{ form.password_confirm() }} <br>
-                {{ form.submit() }}
+                <div class="form-group">
+                    {{ form.username.label }}
+                    {{ form.username(class="form-control", placeholder="Enter your username") }}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label }}
+                    {{ form.email(class="form-control", placeholder="Enter your email") }}
+                </div>
+                <div class="form-group">
+                    {{ form.role.label }}
+                    {{ form.role(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label }}
+                    {{ form.password(class="form-control", placeholder="Enter your password") }}
+                </div>
+                <div class="form-group">
+                    {{ form.password_confirm.label }}
+                    {{ form.password_confirm(class="form-control", placeholder="Confirm your password") }}
+                </div>
+                {{ form.submit(class="submit-btn") }}
             </form>
-            
 
-            <a href="{{ url_for('login') }}">
-                <button type="button">Login here</button>
-            </a>
+            <div class="login-link">
+                <a href="{{ url_for('login') }}">
+                    <button type="button">Already have an account? Login here</button>
+                </a>
+            </div>
         </div>
     </div>
 </body>

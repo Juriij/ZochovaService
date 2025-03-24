@@ -1,1 +1,61 @@
 {% extends "_base.html" %}
+
+{% block title %}Janitor Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-log-reg">
+    <header>
+        <h1>Janitor Dashboard</h1>
+        <p>Manage and process service requests</p>
+    </header>
+    <div class="article-detail">
+        <div class="request-list">
+            <h2>Pending Requests</h2>
+            {% if pending_requests %}
+                {% for request in pending_requests %}
+                    <div class="request-card">
+                        <strong>{{ request.title }}</strong>
+                        <div class="request-details">
+                            <span class="priority-indicator priority-{{ 'high' if request.priority == 2 else 'medium' if request.priority == 1 else 'low' }}"></span>
+                            <span class="status-badge status-pending">Pending</span>
+                        </div>
+                        <div class="request-actions">
+                            <a href="{{ url_for('view_request', request_id=request.id) }}" class="btn btn-secondary">View Details</a>
+                            <form action="{{ url_for('update_request_status', request_id=request.id) }}" method="POST" style="display: inline;">
+                                <input type="hidden" name="status" value="In Progress">
+                                <button type="submit" class="btn btn-primary">Start Processing</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No pending requests found.</p>
+            {% endif %}
+        </div>
+
+        <div class="request-list">
+            <h2>In Progress Requests</h2>
+            {% if in_progress_requests %}
+                {% for request in in_progress_requests %}
+                    <div class="request-card">
+                        <strong>{{ request.title }}</strong>
+                        <div class="request-details">
+                            <span class="priority-indicator priority-{{ 'high' if request.priority == 2 else 'medium' if request.priority == 1 else 'low' }}"></span>
+                            <span class="status-badge status-in-progress">In Progress</span>
+                        </div>
+                        <div class="request-actions">
+                            <a href="{{ url_for('view_request', request_id=request.id) }}" class="btn btn-secondary">View Details</a>
+                            <form action="{{ url_for('update_request_status', request_id=request.id) }}" method="POST" style="display: inline;">
+                                <input type="hidden" name="status" value="Completed">
+                                <button type="submit" class="btn btn-primary">Mark as Completed</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No in-progress requests found.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

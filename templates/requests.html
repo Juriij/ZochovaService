@@ -1,53 +1,68 @@
 {% extends "_base.html" %}
 
-{% block title %}Poziadavky{% endblock %}
+{% block title %}Requests{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2>Add request</h2>
-    <form action="{{ url_for('add_request') }}" method="POST">
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" required>
-        <br>
-        <label for="description">Description:</label>
-        <textarea id="description" name="description" required></textarea>
-        <br>
-        <label for="room">Room:</label>
-        <input type="text" id="room" name="place" required> <!-- Updated to match 'place' in model -->
-        <br>
-        <label for="priority">Priority:</label>
-        <select id="priority" name="priority">
-            <option value="0">Low</option>
-            <option value="1">Medium</option>
-            <option value="2">High</option>
-        </select>
-        <br>
-        <button type="submit">Odoslať požiadavku</button>
-    </form>
+<div class="container-log-reg">
+    <header>
+        <h1>Add New Request</h1>
+        <p>Submit a new service request</p>
+    </header>
+    <div class="article-detail">
+        <form action="{{ url_for('add_request') }}" method="POST" class="register-login">
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" class="form-control" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="room">Room:</label>
+                <input type="text" id="room" name="place" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="priority">Priority:</label>
+                <select id="priority" name="priority" class="form-control">
+                    <option value="0">Low</option>
+                    <option value="1">Medium</option>
+                    <option value="2">High</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="submit-btn">Submit Request</button>
+        </form>
+    </div>
+</div>
 
-    <h2>Active requests</h2>
-
-    <!-- Display the active requests -->
+<div class="main-content">
+    <h2>Active Requests</h2>
     {% if active_requests %}
-        <ul>
+        <div class="requests-grid">
             {% for request in active_requests %}
-                <li>
-                    <strong>{{ request.title }}</strong> (Priority: 
-                        {% if request.priority == 0 %}
-                            Low
-                        {% elif request.priority == 1 %}
-                            Medium
-                        {% else %}
-                            High
-                        {% endif %},
-                        Status:
-                        {{ request.status }})
-                    
-                    <!-- Link to view the full request with description -->
-                    <a href="{{ url_for('view_request', request_id=request.id) }}">View Full Description</a>
-                </li>
+                <div class="request-grid-card">
+                    <div class="request-header">
+                        <div class="request-title">{{ request.title }}</div>
+                        <div class="request-meta">
+                            <span class="priority-indicator priority-{{ 'high' if request.priority == 2 else 'medium' if request.priority == 1 else 'low' }}"></span>
+                            <span class="status-badge status-{{ request.status.lower().replace(' ', '-') }}">
+                                {{ request.status }}
+                            </span>
+                        </div>
+                        <div class="request-place">
+                            <strong>Room:</strong> {{ request.place }}
+                        </div>
+                    </div>
+                    <div class="request-actions">
+                        <a href="{{ url_for('view_request', request_id=request.id) }}" class="btn btn-secondary">View Details</a>
+                    </div>
+                </div>
             {% endfor %}
-        </ul>
+        </div>
     {% else %}
         <p>No active requests found.</p>
     {% endif %}

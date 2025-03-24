@@ -10,6 +10,7 @@ from flask_login import current_user
 
 
 app = Flask(__name__)
+app.debug = True  # Enable debug mode
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///requests.db'

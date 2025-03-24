@@ -1,51 +1,51 @@
 {% extends "_base.html" %}
 
-{% block title %}Historia poziadaviek{% endblock %}
+{% block title %}Request History{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h2>Completed Requests</h2>
-    {% if completed_requests %}
-        <ul>
+<div class="container-log-reg">
+    <header>
+        <h1>Request History</h1>
+        <p>View your completed and denied requests</p>
+    </header>
+    <div class="request-list">
+        <h2>Completed Requests</h2>
+        {% if completed_requests %}
             {% for request in completed_requests %}
-                <li>
-                    <strong>{{ request.title }}</strong> (Priority: 
-                    {% if request.priority == 0 %}
-                        Low
-                    {% elif request.priority == 1 %}
-                        Medium
-                    {% else %}
-                        High
-                    {% endif %}
-                    ) - <a href="{{ url_for('view_request', request_id=request.id) }}">View Request</a>
-                </li>
+                <div class="request-card">
+                    <strong>{{ request.title }}</strong>
+                    <div class="request-details">
+                        <span class="priority-indicator priority-{{ 'high' if request.priority == 2 else 'medium' if request.priority == 1 else 'low' }}"></span>
+                        <span class="status-badge status-completed">Completed</span>
+                    </div>
+                    <div class="request-actions">
+                        <a href="{{ url_for('view_request', request_id=request.id) }}" class="btn btn-secondary">View Details</a>
+                    </div>
+                </div>
             {% endfor %}
-        </ul>
-    {% else %}
-        <p>No completed requests found.</p>
-    {% endif %}
-</div>
+        {% else %}
+            <p>No completed requests found.</p>
+        {% endif %}
+    </div>
 
-<div class="container">
-    <h2>Denied Requests</h2>
-    {% if denied_requests %}
-        <ul>
+    <div class="request-list">
+        <h2>Denied Requests</h2>
+        {% if denied_requests %}
             {% for request in denied_requests %}
-                <li>
-                    <strong>{{ request.title }}</strong> (Priority: 
-                    {% if request.priority == 0 %}
-                        Low
-                    {% elif request.priority == 1 %}
-                        Medium
-                    {% else %}
-                        High
-                    {% endif %}
-                    ) - <a href="{{ url_for('view_request', request_id=request.id) }}">View Request</a>
-                </li>
+                <div class="request-card">
+                    <strong>{{ request.title }}</strong>
+                    <div class="request-details">
+                        <span class="priority-indicator priority-{{ 'high' if request.priority == 2 else 'medium' if request.priority == 1 else 'low' }}"></span>
+                        <span class="status-badge status-denied">Denied</span>
+                    </div>
+                    <div class="request-actions">
+                        <a href="{{ url_for('view_request', request_id=request.id) }}" class="btn btn-secondary">View Details</a>
+                    </div>
+                </div>
             {% endfor %}
-        </ul>
-    {% else %}
-        <p>No denied requests found.</p>
-    {% endif %}
+        {% else %}
+            <p>No denied requests found.</p>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}
